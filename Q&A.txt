@@ -1,0 +1,153 @@
+What is a Savings Account?
+An account designed for individuals to park their money while earning a small amount of interest.
+
+What is a Current Account?
+An account meant for businesses with no limit on the number of daily transactions; it usually offers no interest.
+
+What is a Fixed Deposit (FD)?
+An investment where you lock a sum of money for a specific period at a higher interest rate than a savings account.
+
+What does KYC stand for?
+Know Your Customer. It’s a process to verify the identity and address of customers.
+
+What is a Check/Cheque?
+A written document that orders a bank to pay a specific amount of money from a person's account to another person.
+
+What is a Bounced Cheque?
+A cheque that the bank refuses to pay because there isn't enough money in the account.
+
+What is a Demand Draft (DD)?
+A pre-paid instrument issued by a bank to make a payment to a third party; it is more secure than a cheque.
+
+What is an Overdraft?
+A facility that allows an account holder to withdraw more money than they actually have in their account, up to a certain limit.
+
+What is a Joint Account?
+An account opened in the name of two or more individuals.
+
+What is a Nominee?
+A person designated by the account holder to receive the funds in the account in the event of the holder's death.
+
+Section 2: Cards & Digital Banking
+What is a Debit Card?
+A card linked directly to your bank account; money is deducted instantly when you spend.
+
+What is a Credit Card?
+A card that allows you to borrow money from the bank up to a limit to make purchases, which you pay back later.
+
+What is a PIN?
+Personal Identification Number; a secret code used to authorize card transactions.
+
+What is an ATM?
+Automated Teller Machine; a machine that lets you withdraw cash and check balances without a human teller.
+
+What is Mobile Banking?
+Using a smartphone app provided by the bank to perform financial transactions.
+
+What is Net Banking?
+Accessing banking services through the bank's official website using a browser.
+
+What is an OTP?
+One-Time Password; a temporary code sent to your phone for secure online transactions.
+
+What is NEFT?
+National Electronic Funds Transfer; a way to send money between banks in batches.
+
+What is RTGS?
+Real-Time Gross Settlement; used for high-value, instant money transfers.
+
+What is IMPS?
+Immediate Payment Service; an instant 24/7 interbank electronic fund transfer service.
+
+Section 3: Loans & Interest
+What is a Loan?
+Money borrowed from a bank that must be paid back with interest over a period of time.
+
+What is a Mortgage?
+A loan specifically used to purchase a home or real estate, where the property serves as collateral.
+
+What is Collateral?
+An asset (like a house or gold) that a borrower offers to a lender to secure a loan.
+
+What is an EMI?
+Equated Monthly Installment; the fixed amount paid by a borrower to a lender every month.
+
+What is the Repo Rate?
+The rate at which the central bank (like RBI) lends money to commercial banks.
+
+What is a Credit Score?
+A number that represents a person's creditworthiness based on their borrowing history.
+
+What is Simple Interest?
+Interest calculated only on the principal amount borrowed or deposited.
+
+What is Compound Interest?
+Interest calculated on the principal plus the interest that has already accumulated.
+
+What is a Personal Loan?
+An unsecured loan used for various personal expenses like travel or weddings.
+
+What is a Default?
+The failure to repay a loan or meet the legal obligations of a loan agreement.
+
+Section 4: Bank Operations & Security
+What is a Bank Statement?
+A monthly record of all transactions (deposits and withdrawals) in an account.
+
+What is a Passbook?
+A small book issued to savings account holders to record all transactions manually or via machine.
+
+What is a Ledger Balance?
+The total amount of money in an account at the start of the business day.
+
+What is an Available Balance?
+The amount of money in your account that you can actually spend right now.
+
+What is Phishing?
+A fraudulent attempt to steal personal information like passwords by pretending to be a bank via email or SMS.
+
+What is a Dormant Account?
+An account that has seen no customer-initiated transactions for a long period (usually 2 years).
+
+What is a Bank Vault?
+A secure space where money, valuables, and records are stored.
+
+What is a Locker Facility?
+A safe deposit box rented by a customer to store jewelry or important documents.
+
+What is a Bank Teller?
+An employee at the bank counter who handles cash deposits, withdrawals, and other basic tasks.
+
+What is a Branch Manager?
+The person in charge of the operations and employees of a specific bank location.
+
+Section 5: General Finance Terms
+What is Inflation?
+The rate at which the general level of prices for goods and services is rising, reducing purchasing power.
+
+What is a Central Bank?
+The main institution that manages a country's currency and monetary policy (e.g., RBI in India, Federal Reserve in the US).
+
+What is Liquidity?
+The ease with which an asset can be converted into cash without affecting its market price.
+
+What is a Bad Debt?
+A loan that is unlikely to be repaid by the borrower.
+
+What is an NPA?
+Non-Performing Asset; a loan where the interest or principal has been overdue for a specific period (usually 90 days).
+
+What is Direct Deposit?
+An electronic transfer of a payment (like a salary) directly from the payer's account to the recipient's account.
+
+What is a Withdrawal Slip?
+A form used in a bank branch to take money out of an account.
+
+What is a Deposit Slip?
+A form used to put cash or cheques into a bank account.
+
+What is the IFSC Code?
+Indian Financial System Code; a unique alphanumeric code used to identify a specific bank branch for electronic transfers.
+
+What is a MICR Code?
+Magnetic Ink Character Recognition; a code used mainly for the processing and clearance of cheques.

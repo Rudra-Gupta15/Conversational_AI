@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>RUD AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(135deg, #808000 0%, #6B8E23 100%);
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .header-icon {
+            font-size: 1.5em;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-category-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            margin-left: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-menu {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-menu:active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 100vh;
+            background: #262626;
+            border-right: 1px solid #404040;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid #404040;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #808000 0%, #6B8E23 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .new-chat-btn {
+            width: 36px;
+            height: 36px;
+            background: #404040;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .new-chat-btn:hover {
+            background: #505050;
+        }
+
+        .close-sidebar {
+            width: 32px;
+            height: 32px;
+            background: #404040;
+            border: none;
+            border-radius: 6px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            padding: 16px 0;
+            overflow-y: auto;
+        }
+
+        .section-label {
+            padding: 8px 16px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            color: #808080;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .category-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid transparent;
+            color: #b0b0b0;
+            font-size: 0.9em;
+        }
+
+        .category-item:hover {
+            background: #333333;
+        }
+
+        .category-item.active {
+            background: rgba(128, 128, 0, 0.1);
+            border-left-color: #808000;
+            color: #a0a000;
+        }
+
+        .category-icon {
+            font-size: 1.2em;
+            min-width: 24px;
+        }
+
+        .category-count {
+            margin-left: auto;
+            font-size: 0.8em;
+            color: #606060;
+        }
+
+        .question-item {
+            font-size: 0.85em;
+            color: #909090;
+            padding: 10px 16px;
+            padding-left: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: none;
+        }
+
+        .question-item.show {
+            display: block;
+        }
+
+        .question-item:hover {
+            background: #2a2a2a;
+        }
+
+        .sidebar-footer {
+            padding: 8px 12px;
+            border-top: 1px solid #404040;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            display: none;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #808000 0%, #6B8E23 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.75em;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 0.7em;
+            color: #808080;
+        }
+
+        .footer-link {
+            color: #a0a000;
+            text-decoration: none;
+            font-size: 0.7em;
+            transition: all 0.2s;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+            color: #b0b000;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .desktop-header {
+            padding: 15px 30px;
+            border-bottom: 1px solid #404040;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #1a1a1a;
+        }
+
+        .desktop-header-title {
+            font-size: 0.95em;
+            color: #b0b0b0;
+            font-weight: 500;
+        }
+
+        .desktop-header-badge {
+            background: rgba(128, 128, 0, 0.1);
+            border: 1px solid #808000;
+            color: #a0a000;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .welcome-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: #808080;
+            padding: 16px;
+        }
+
+        .welcome-section h1 {
+            font-size: 2em;
+            color: #505050;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .welcome-section p {
+            font-size: 0.95em;
+            color: #707070;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        .message.user .message-bubble {
+            background: #808000;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-bubble {
+            background: #262626;
+            color: #e0e0e0;
+            border: 1px solid #404040;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-tag {
+            display: inline-block;
+            background: rgba(128, 128, 0, 0.15);
+            border: 1px solid #808000;
+            color: #a0a000;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            margin-top: 8px;
+        }
+
+        .typing {
+            display: flex;
+            gap: 4px;
+            padding: 10px 14px;
+            background: #262626;
+            border: 1px solid #404040;
+            border-radius: 16px;
+            width: fit-content;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #808000;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* ===== INPUT AREA ===== */
+        .input-area {
+            padding: 12px 16px 16px;
+            background: #1a1a1a;
+            border-top: 1px solid #404040;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 10px 14px;
+            background: #262626;
+            border: 1px solid #404040;
+            border-radius: 20px;
+            color: #e0e0e0;
+            font-size: 0.95em;
+            outline: none;
+            transition: all 0.2s;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            min-height: 40px;
+        }
+
+        #userInput:focus {
+            border-color: #808000;
+            box-shadow: 0 0 0 2px rgba(128, 128, 0, 0.1);
+        }
+
+        #userInput::placeholder {
+            color: #606060;
+        }
+
+        #sendBtn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #808000 0%, #6B8E23 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        #sendBtn:hover {
+            transform: scale(1.05);
+        }
+
+        #sendBtn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+
+        .sidebar-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar-content::-webkit-scrollbar-thumb {
+            background: #404040;
+            border-radius: 3px;
+        }
+
+        /* ===== FOOTER ===== */
+        .app-footer {
+            padding: 8px 12px;
+            background: #262626;
+            border-top: 1px solid #404040;
+            text-align: center;
+            display: none;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .footer-creator-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #808000 0%, #6B8E23 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            font-size: 0.75em;
+            box-shadow: none;
+        }
+
+        .footer-creator-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .footer-creator-name {
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #a0a000;
+        }
+
+        .footer-creator-title {
+            font-size: 0.65em;
+            color: #808080;
+            display: none;
+        }
+
+        .footer-creator-link {
+            font-size: 0.65em;
+            color: #a0a000;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-top: 1px;
+        }
+
+        .footer-creator-link:hover {
+            color: #b0b000;
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .header-menu {
+                display: flex;
+            }
+
+            .new-chat-btn {
+                display: none;
+            }
+
+            .desktop-header {
+                display: none;
+            }
+
+            .app-footer {
+                display: flex;
+                justify-content: center;
+            }
+
+            .sidebar {
+                width: 280px;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+
+        @media (min-width: 769px) {
+            body {
+                flex-direction: row;
+            }
+
+            .header {
+                display: none;
+            }
+
+            .header-menu {
+                display: none !important;
+            }
+
+            .new-chat-btn {
+                display: flex !important;
+            }
+
+            .sidebar {
+                position: static;
+                transform: translateX(0) !important;
+                width: 300px;
+                height: 100vh;
+            }
+
+            .sidebar-overlay {
+                display: none !important;
+            }
+
+            .close-sidebar {
+                display: none;
+            }
+
+            .sidebar-footer {
+                display: flex !important;
+            }
+
+            .app-footer {
+                display: none !important;
+            }
+
+            .desktop-header {
+                display: flex;
+            }
+
+            .main-content {
+                flex: 1;
+            }
+
+            .message-bubble {
+                max-width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MOBILE HEADER -->
+    <div class="header">
+        <div class="header-title">
+            <div class="header-icon">R</div>
+            <span>RUD AI</span>
+            <div class="header-category-badge" id="headerCategory">Normal</div>
+        </div>
+        <button class="header-menu" id="menuBtn">☰</button>
+    </div>
+
+    <!-- SIDEBAR OVERLAY -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">R</div>
+                <span>RUD AI</span>
+            </div>
+            <button class="new-chat-btn" id="newChatBtn">➕</button>
+            <button class="close-sidebar" id="closeSidebar">✕</button>
+        </div>
+
+        <div class="sidebar-content">
+            <div class="section-label">MODES</div>
+            
+            <div class="category-item" data-category="Normal">
+                <span class="category-icon">💬</span>
+                <span>Normal</span>
+                <span class="category-count">40</span>
+            </div>
+            
+            <div class="category-item" data-category="Banking">
+                <span class="category-icon">🏦</span>
+                <span>Banking</span>
+                <span class="category-count">40</span>
+            </div>
+            
+            <div class="category-item" data-category="Cooking">
+                <span class="category-icon">👨‍🍳</span>
+                <span>Cooking</span>
+                <span class="category-count">40</span>
+            </div>
+            
+            <div class="category-item" data-category="Entertainment">
+                <span class="category-icon">🎬</span>
+                <span>Entertainment</span>
+                <span class="category-count">40</span>
+            </div>
+            
+            <div class="category-item" data-category="Study">
+                <span class="category-icon">📚</span>
+                <span>Study</span>
+                <span class="category-count">40</span>
+            </div>
+
+            <div class="category-item" data-category="Fun">
+                <span class="category-icon">🎮</span>
+                <span>Fun</span>
+                <span class="category-count">40</span>
+            </div>
+
+            <div class="section-label" style="margin-top: 20px;">QUESTIONS (240 Total)</div>
+            
+            <!-- NORMAL MODE - 40 Questions -->
+            <div class="question-item" data-category="Normal">What's your name?</div>
+            <div class="question-item" data-category="Normal">How are you?</div>
+            <div class="question-item" data-category="Normal">Tell me a joke</div>
+            <div class="question-item" data-category="Normal">What can you do?</div>
+            <div class="question-item" data-category="Normal">What's the weather like?</div>
+            <div class="question-item" data-category="Normal">What's the time?</div>
+            <div class="question-item" data-category="Normal">Tell me something interesting</div>
+            <div class="question-item" data-category="Normal">How do I learn programming?</div>
+            <div class="question-item" data-category="Normal">What's the best way to stay healthy?</div>
+            <div class="question-item" data-category="Normal">How to manage stress?</div>
+            <div class="question-item" data-category="Normal">What are good habits?</div>
+            <div class="question-item" data-category="Normal">Tell me about yourself</div>
+            <div class="question-item" data-category="Normal">Can you help me?</div>
+            <div class="question-item" data-category="Normal">What's your favorite thing?</div>
+            <div class="question-item" data-category="Normal">How to be productive?</div>
+            <div class="question-item" data-category="Normal">What's artificial intelligence?</div>
+            <div class="question-item" data-category="Normal">How to make friends?</div>
+            <div class="question-item" data-category="Normal">What's the meaning of life?</div>
+            <div class="question-item" data-category="Normal">How to be happy?</div>
+            <div class="question-item" data-category="Normal">Tell me a fact</div>
+            <div class="question-item" data-category="Normal">What should I eat?</div>
+            <div class="question-item" data-category="Normal">How to exercise?</div>
+            <div class="question-item" data-category="Normal">What's the best book to read?</div>
+            <div class="question-item" data-category="Normal">How to save money?</div>
+            <div class="question-item" data-category="Normal">What's a good career?</div>
+            <div class="question-item" data-category="Normal">How to learn a new language?</div>
+            <div class="question-item" data-category="Normal">What's the internet?</div>
+            <div class="question-item" data-category="Normal">How to write well?</div>
+            <div class="question-item" data-category="Normal">What's meditation?</div>
+            <div class="question-item" data-category="Normal">How to improve memory?</div>
+            <div class="question-item" data-category="Normal">Tell me about planets</div>
+            <div class="question-item" data-category="Normal">What's the speed of light?</div>
+            <div class="question-item" data-category="Normal">How to be confident?</div>
+            <div class="question-item" data-category="Normal">What's entrepreneurship?</div>
+            <div class="question-item" data-category="Normal">How to start a business?</div>
+            <div class="question-item" data-category="Normal">What's the difference between AI and ML?</div>
+            <div class="question-item" data-category="Normal">Tell me about history</div>
+            <div class="question-item" data-category="Normal">How to travel smart?</div>
+            <div class="question-item" data-category="Normal">What are life skills?</div>
+            <div class="question-item" data-category="Normal">Any advice for me?</div>
+
+            <!-- BANKING MODE - 40 Questions -->
+            <div class="question-item" data-category="Banking">What is a Savings Account?</div>
+            <div class="question-item" data-category="Banking">What is a Current Account?</div>
+            <div class="question-item" data-category="Banking">What is a Credit Score?</div>
+            <div class="question-item" data-category="Banking">What is UPI?</div>
+            <div class="question-item" data-category="Banking">What is an EMI?</div>
+            <div class="question-item" data-category="Banking">How to open a bank account?</div>
+            <div class="question-item" data-category="Banking">What is a Debit Card?</div>
+            <div class="question-item" data-category="Banking">What is a Credit Card?</div>
+            <div class="question-item" data-category="Banking">What is a Fixed Deposit?</div>
+            <div class="question-item" data-category="Banking">What is a Recurring Deposit?</div>
+            <div class="question-item" data-category="Banking">What is KYC?</div>
+            <div class="question-item" data-category="Banking">What is a Mortgage?</div>
+            <div class="question-item" data-category="Banking">What is a Home Loan?</div>
+            <div class="question-item" data-category="Banking">What is a Personal Loan?</div>
+            <div class="question-item" data-category="Banking">What is Vehicle Loan?</div>
+            <div class="question-item" data-category="Banking">What is an Education Loan?</div>
+            <div class="question-item" data-category="Banking">What is a Loan Against Property?</div>
+            <div class="question-item" data-category="Banking">What is Interest Rate?</div>
+            <div class="question-item" data-category="Banking">What is Compound Interest?</div>
+            <div class="question-item" data-category="Banking">What is Simple Interest?</div>
+            <div class="question-item" data-category="Banking">What is CIBIL?</div>
+            <div class="question-item" data-category="Banking">What is a Bank Statement?</div>
+            <div class="question-item" data-category="Banking">What is a Cheque?</div>
+            <div class="question-item" data-category="Banking">What is a Demand Draft?</div>
+            <div class="question-item" data-category="Banking">What is NEFT?</div>
+            <div class="question-item" data-category="Banking">What is RTGS?</div>
+            <div class="question-item" data-category="Banking">What is Overdraft?</div>
+            <div class="question-item" data-category="Banking">What is a Safe Deposit Locker?</div>
+            <div class="question-item" data-category="Banking">What is Investment?</div>
+            <div class="question-item" data-category="Banking">What is Mutual Fund?</div>
+            <div class="question-item" data-category="Banking">What is a Stock?</div>
+            <div class="question-item" data-category="Banking">What is a Bond?</div>
+            <div class="question-item" data-category="Banking">What is Insurance?</div>
+            <div class="question-item" data-category="Banking">What is Health Insurance?</div>
+            <div class="question-item" data-category="Banking">What is Life Insurance?</div>
+            <div class="question-item" data-category="Banking">What is Tax?</div>
+            <div class="question-item" data-category="Banking">What is GST?</div>
+            <div class="question-item" data-category="Banking">What is Income Tax?</div>
+            <div class="question-item" data-category="Banking">How to build credit?</div>
+            <div class="question-item" data-category="Banking">What is financial planning?</div>
+
+            <!-- COOKING MODE - 40 Questions -->
+            <div class="question-item" data-category="Cooking">How to make Biryani?</div>
+            <div class="question-item" data-category="Cooking">How to make Pasta?</div>
+            <div class="question-item" data-category="Cooking">How to make Fried Rice?</div>
+            <div class="question-item" data-category="Cooking">How to make Chicken Curry?</div>
+            <div class="question-item" data-category="Cooking">How to make Butter Chicken?</div>
+            <div class="question-item" data-category="Cooking">How to make Dal Makhani?</div>
+            <div class="question-item" data-category="Cooking">How to make Paneer Tikka?</div>
+            <div class="question-item" data-category="Cooking">How to make Pizza?</div>
+            <div class="question-item" data-category="Cooking">How to make Burger?</div>
+            <div class="question-item" data-category="Cooking">How to make Sandwich?</div>
+            <div class="question-item" data-category="Cooking">How to make Samosa?</div>
+            <div class="question-item" data-category="Cooking">How to make Chutney?</div>
+            <div class="question-item" data-category="Cooking">How to make Noodles?</div>
+            <div class="question-item" data-category="Cooking">How to make Soup?</div>
+            <div class="question-item" data-category="Cooking">How to make Salad?</div>
+            <div class="question-item" data-category="Cooking">How to make Bread?</div>
+            <div class="question-item" data-category="Cooking">How to make Cake?</div>
+            <div class="question-item" data-category="Cooking">How to make Cookies?</div>
+            <div class="question-item" data-category="Cooking">How to make Brownies?</div>
+            <div class="question-item" data-category="Cooking">How to make Tea?</div>
+            <div class="question-item" data-category="Cooking">How to make Coffee?</div>
+            <div class="question-item" data-category="Cooking">How to make Juice?</div>
+            <div class="question-item" data-category="Cooking">How to make Smoothie?</div>
+            <div class="question-item" data-category="Cooking">How to make Curd?</div>
+            <div class="question-item" data-category="Cooking">How to make Yogurt?</div>
+            <div class="question-item" data-category="Cooking">How to roast vegetables?</div>
+            <div class="question-item" data-category="Cooking">How to grill meat?</div>
+            <div class="question-item" data-category="Cooking">How to bake fish?</div>
+            <div class="question-item" data-category="Cooking">How to steam vegetables?</div>
+            <div class="question-item" data-category="Cooking">How to boil eggs?</div>
+            <div class="question-item" data-category="Cooking">How to make omelette?</div>
+            <div class="question-item" data-category="Cooking">How to make pancakes?</div>
+            <div class="question-item" data-category="Cooking">How to make waffle?</div>
+            <div class="question-item" data-category="Cooking">How to make dessert?</div>
+            <div class="question-item" data-category="Cooking">What are cooking techniques?</div>
+            <div class="question-item" data-category="Cooking">How to use spices?</div>
+            <div class="question-item" data-category="Cooking">How to season food?</div>
+            <div class="question-item" data-category="Cooking">How to make sauce?</div>
+            <div class="question-item" data-category="Cooking">What are basic recipes?</div>
+            <div class="question-item" data-category="Cooking">How to meal prep?</div>
+
+            <!-- ENTERTAINMENT MODE - 40 Questions -->
+            <div class="question-item" data-category="Entertainment">Best movies of 2024?</div>
+            <div class="question-item" data-category="Entertainment">Top rated TV shows?</div>
+            <div class="question-item" data-category="Entertainment">Best songs right now?</div>
+            <div class="question-item" data-category="Entertainment">Recommend a movie</div>
+            <div class="question-item" data-category="Entertainment">Recommend a TV series</div>
+            <div class="question-item" data-category="Entertainment">Best action movies?</div>
+            <div class="question-item" data-category="Entertainment">Best comedy movies?</div>
+            <div class="question-item" data-category="Entertainment">Best drama movies?</div>
+            <div class="question-item" data-category="Entertainment">Best horror movies?</div>
+            <div class="question-item" data-category="Entertainment">Best animated movies?</div>
+            <div class="question-item" data-category="Entertainment">Best superhero movies?</div>
+            <div class="question-item" data-category="Entertainment">Best thriller movies?</div>
+            <div class="question-item" data-category="Entertainment">Best romance movies?</div>
+            <div class="question-item" data-category="Entertainment">Best sci-fi movies?</div>
+            <div class="question-item" data-category="Entertainment">Best fantasy movies?</div>
+            <div class="question-item" data-category="Entertainment">Best documentaries?</div>
+            <div class="question-item" data-category="Entertainment">Best music albums?</div>
+            <div class="question-item" data-category="Entertainment">Best actors?</div>
+            <div class="question-item" data-category="Entertainment">Best actresses?</div>
+            <div class="question-item" data-category="Entertainment">Best directors?</div>
+            <div class="question-item" data-category="Entertainment">Best singers?</div>
+            <div class="question-item" data-category="Entertainment">Best musicians?</div>
+            <div class="question-item" data-category="Entertainment">What's trending on Netflix?</div>
+            <div class="question-item" data-category="Entertainment">What's trending on YouTube?</div>
+            <div class="question-item" data-category="Entertainment">Best video games?</div>
+            <div class="question-item" data-category="Entertainment">Best anime series?</div>
+            <div class="question-item" data-category="Entertainment">Best web series?</div>
+            <div class="question-item" data-category="Entertainment">Best movies for family?</div>
+            <div class="question-item" data-category="Entertainment">Best movies for kids?</div>
+            <div class="question-item" data-category="Entertainment">Best independent films?</div>
+            <div class="question-item" data-category="Entertainment">Best Oscar winners?</div>
+            <div class="question-item" data-category="Entertainment">Best award-winning series?</div>
+            <div class="question-item" data-category="Entertainment">Best comedy stand-up?</div>
+            <div class="question-item" data-category="Entertainment">Best music videos?</div>
+            <div class="question-item" data-category="Entertainment">Best movie adaptations?</div>
+            <div class="question-item" data-category="Entertainment">Best book-to-movie conversions?</div>
+            <div class="question-item" data-category="Entertainment">Best binge-worthy shows?</div>
+            <div class="question-item" data-category="Entertainment">Best new releases?</div>
+            <div class="question-item" data-category="Entertainment">What's popular on social media?</div>
+            <div class="question-item" data-category="Entertainment">Tell me about celebrity news?</div>
+
+            <!-- STUDY MODE - 40 Questions -->
+            <div class="question-item" data-category="Study">What is Photosynthesis?</div>
+            <div class="question-item" data-category="Study">Explain Gravity</div>
+            <div class="question-item" data-category="Study">What is the Pythagorean Theorem?</div>
+            <div class="question-item" data-category="Study">Tell me about World War 2</div>
+            <div class="question-item" data-category="Study">What is Algebra?</div>
+            <div class="question-item" data-category="Study">What is Geometry?</div>
+            <div class="question-item" data-category="Study">What is Biology?</div>
+            <div class="question-item" data-category="Study">What is Chemistry?</div>
+            <div class="question-item" data-category="Study">What is Physics?</div>
+            <div class="question-item" data-category="Study">What is the Periodic Table?</div>
+            <div class="question-item" data-category="Study">What is evolution?</div>
+            <div class="question-item" data-category="Study">What is DNA?</div>
+            <div class="question-item" data-category="Study">What is the solar system?</div>
+            <div class="question-item" data-category="Study">What are planets?</div>
+            <div class="question-item" data-category="Study">What is astronomy?</div>
+            <div class="question-item" data-category="Study">What is history?</div>
+            <div class="question-item" data-category="Study">What is geography?</div>
+            <div class="question-item" data-category="Study">What is democracy?</div>
+            <div class="question-item" data-category="Study">What is economics?</div>
+            <div class="question-item" data-category="Study">What is psychology?</div>
+            <div class="question-item" data-category="Study">What is sociology?</div>
+            <div class="question-item" data-category="Study">What is anthropology?</div>
+            <div class="question-item" data-category="Study">What is linguistics?</div>
+            <div class="question-item" data-category="Study">What is literature?</div>
+            <div class="question-item" data-category="Study">What is poetry?</div>
+            <div class="question-item" data-category="Study">What is art history?</div>
+            <div class="question-item" data-category="Study">What is architecture?</div>
+            <div class="question-item" data-category="Study">What is music theory?</div>
+            <div class="question-item" data-category="Study">What is mathematics?</div>
+            <div class="question-item" data-category="Study">What is calculus?</div>
+            <div class="question-item" data-category="Study">What is statistics?</div>
+            <div class="question-item" data-category="Study">What is logic?</div>
+            <div class="question-item" data-category="Study">What is philosophy?</div>
+            <div class="question-item" data-category="Study">What is ethics?</div>
+            <div class="question-item" data-category="Study">What are human rights?</div>
+            <div class="question-item" data-category="Study">What is environmental science?</div>
+            <div class="question-item" data-category="Study">What is technology?</div>
+            <div class="question-item" data-category="Study">What is computer science?</div>
+            <div class="question-item" data-category="Study">What is programming?</div>
+            <div class="question-item" data-category="Study">How to study effectively?</div>
+
+            <!-- FUN MODE - 40 Questions -->
+            <div class="question-item" data-category="Fun">Tell me a riddle</div>
+            <div class="question-item" data-category="Fun">Play 20 questions</div>
+            <div class="question-item" data-category="Fun">Trivia question</div>
+            <div class="question-item" data-category="Fun">Word games</div>
+            <div class="question-item" data-category="Fun">Tell me a joke</div>
+            <div class="question-item" data-category="Fun">Make me laugh</div>
+            <div class="question-item" data-category="Fun">Funny story</div>
+            <div class="question-item" data-category="Fun">Puns please</div>
+            <div class="question-item" data-category="Fun">Tongue twister</div>
+            <div class="question-item" data-category="Fun">What's a good prank?</div>
+            <div class="question-item" data-category="Fun">Riddle me this</div>
+            <div class="question-item" data-category="Fun">Guess the answer</div>
+            <div class="question-item" data-category="Fun">Play charades</div>
+            <div class="question-item" data-category="Fun">Knock knock joke</div>
+            <div class="question-item" data-category="Fun">What's funny?</div>
+            <div class="question-item" data-category="Fun">Tell a dad joke</div>
+            <div class="question-item" data-category="Fun">Sarcasm please</div>
+            <div class="question-item" data-category="Fun">Make a pun</div>
+            <div class="question-item" data-category="Fun">Tell a silly joke</div>
+            <div class="question-item" data-category="Fun">What makes you laugh?</div>
+            <div class="question-item" data-category="Fun">Play word association</div>
+            <div class="question-item" data-category="Fun">I spy game</div>
+            <div class="question-item" data-category="Fun">Rhyme time</div>
+            <div class="question-item" data-category="Fun">Rhyming game</div>
+            <div class="question-item" data-category="Fun">Acronym game</div>
+            <div class="question-item" data-category="Fun">What am I guessing?</div>
+            <div class="question-item" data-category="Fun">Animal riddle</div>
+            <div class="question-item" data-category="Fun">Math riddle</div>
+            <div class="question-item" data-category="Fun">Logic puzzle</div>
+            <div class="question-item" data-category="Fun">Brain teaser</div>
+            <div class="question-item" data-category="Fun">Funny question</div>
+            <div class="question-item" data-category="Fun">Dumb question answered smartly</div>
+            <div class="question-item" data-category="Fun">Hilarious fact</div>
+            <div class="question-item" data-category="Fun">Funny story about animals</div>
+            <div class="question-item" data-category="Fun">Funny story about humans</div>
+            <div class="question-item" data-category="Fun">Funny story about technology</div>
+            <div class="question-item" data-category="Fun">Funny question to ask friends</div>
+            <div class="question-item" data-category="Fun">Funny quiz</div>
+            <div class="question-item" data-category="Fun">Funny challenge</div>
+            <div class="question-item" data-category="Fun">What's the funniest thing?</div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="footer-logo">RU</div>
+            <div class="footer-text">Made by Rudra Gupta</div>
+            <a href="https://rudra-gupta.vercel.app/" target="_blank" class="footer-link">Portfolio</a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="desktop-header">
+            <div class="desktop-header-title">RUD AI - Multi-Mode Assistant</div>
+            <div class="desktop-header-badge" id="desktopCategory">Normal Mode</div>
+        </div>
+
+        <div class="chat-container" id="chatBox">
+            <div class="welcome-section">
+                <h1>RUD AI</h1>
+                <p>Your intelligent multi-mode assistant 🚀</p>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <textarea id="userInput" placeholder="Ask RUD AI anything..." rows="1"></textarea>
+                <button id="sendBtn">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOBILE FOOTER -->
+    <div class="app-footer">
+        <div class="footer-content">
+            <div class="footer-creator-logo">RU</div>
+            <div class="footer-creator-name">Made by Rudra Gupta</div>
+            <a href="https://rudra-gupta.vercel.app/" target="_blank" class="footer-creator-link">Portfolio</a>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const menuBtn = document.getElementById('menuBtn');
+        const newChatBtn = document.getElementById('newChatBtn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+        const categoryItems = document.querySelectorAll('.category-item[data-category]');
+        const questionItems = document.querySelectorAll('.question-item[data-category]');
+        const headerCategory = document.getElementById('headerCategory');
+        const desktopCategory = document.getElementById('desktopCategory');
+
+        let isWelcomeVisible = true;
+        let activeCategory = 'Normal';
+        let conversationHistory = [];
+
+        userInput.addEventListener('input', () => {
+            userInput.style.height = 'auto';
+            userInput.style.height = Math.min(userInput.scrollHeight, 100) + 'px';
+        });
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        function updateCategoryDisplay() {
+            headerCategory.textContent = activeCategory;
+            desktopCategory.textContent = activeCategory + ' Mode';
+        }
+
+        function hideWelcome() {
+            const welcomeSection = document.querySelector('.welcome-section');
+            if (welcomeSection) {
+                welcomeSection.remove();
+                isWelcomeVisible = false;
+            }
+        }
+
+        function addMessage(message, isUser, category = null) {
+            hideWelcome();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.innerHTML = message.replace(/\n/g, '<br>');
+
+            messageDiv.appendChild(bubble);
+
+            if (!isUser && category && category !== 'N/A') {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'message-tag';
+                tagDiv.textContent = category;
+                bubble.appendChild(tagDiv);
+            }
+
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            conversationHistory.push({
+                role: isUser ? 'user' : 'assistant',
+                content: message.replace(/<br>/g, '\n').replace(/<[^>]*>/g, '')
+            });
+        }
+
+        function showTyping() {
+            hideWelcome();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.id = 'typing';
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+
+            messageDiv.appendChild(typingDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        async function sendMessage(message = null) {
+            const messageText = message || userInput.value.trim();
+            if (!messageText) return;
+
+            addMessage(messageText, true);
+            userInput.value = '';
+            userInput.style.height = 'auto';
+            showTyping();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        message: messageText,
+                        category: activeCategory,
+                        conversationHistory: conversationHistory
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+
+                if (data.answer) {
+                    addMessage(data.answer, false, data.section);
+                } else {
+                    addMessage('Sorry, couldn\'t get a response. Try again! 😊', false);
+                }
+            } catch (error) {
+                hideTyping();
+                addMessage('Connection error. Server not running! 🔴', false);
+                console.error('Error:', error);
+            }
+        }
+
+        sendBtn.addEventListener('click', () => sendMessage());
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        newChatBtn.addEventListener('click', () => {
+            conversationHistory = [];
+            
+            chatBox.innerHTML = `
+                <div class="welcome-section">
+                    <h1>RUD AI</h1>
+                    <p>Your intelligent multi-mode assistant 🚀</p>
+                </div>
+            `;
+            isWelcomeVisible = true;
+        });
+
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const category = item.dataset.category;
+                activeCategory = category;
+                
+                document.querySelectorAll('.category-item.active').forEach(c => c.classList.remove('active'));
+                item.classList.add('active');
+                
+                updateCategoryDisplay();
+                
+                questionItems.forEach(q => {
+                    if (q.dataset.category === category) {
+                        q.classList.add('show');
+                    } else {
+                        q.classList.remove('show');
+                    }
+                });
+            });
+        });
+
+        questionItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const category = item.dataset.category;
+                if (activeCategory !== category) {
+                    activeCategory = category;
+                    document.querySelectorAll('.category-item.active').forEach(c => c.classList.remove('active'));
+                    document.querySelector(`[data-category="${category}"]`).classList.add('active');
+                    updateCategoryDisplay();
+                }
+                
+                sendMessage(item.textContent);
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+        });
+
+        updateCategoryDisplay();
+        document.querySelector('[data-category="Normal"]').classList.add('active');
+        questionItems.forEach(q => {
+            if (q.dataset.category === 'Normal') {
+                q.classList.add('show');
+            }
+        });
+
+        userInput.focus();
+    </script>
+</body>
+</html>
